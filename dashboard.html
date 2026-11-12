@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard Pro - Swimmo Malang</title>
+    <title>Admin & Coach Dashboard - Swimmo Malang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        brandPink: '#FF4D8D',
-                        brandPinkHover: '#E03B75',
-                        brandAqua: '#00B4D8',
-                    },
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                    colors: { brandPink: '#FF4D8D', brandPinkHover: '#E03B75', brandAqua: '#00B4D8' },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
                 }
             }
         }
     </script>
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            #printableArea, #printableArea * { visibility: visible; }
+            #printableArea { position: fixed; left: 0; top: 0; width: 100%; }
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
@@ -30,24 +33,24 @@
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg bg-brandPink flex items-center justify-center font-black text-lg">S</div>
                 <div>
-                    <span class="font-bold tracking-wide text-sm sm:text-base block leading-none">SWIMMO PRO ADMIN</span>
-                    <span class="text-[11px] text-brandAqua">Sistem Administrasi Terpadu</span>
+                    <span id="navRoleTitle" class="font-bold tracking-wide text-sm sm:text-base block leading-none">SWIMMO ADMIN</span>
+                    <span id="navUserSub" class="text-[11px] text-brandAqua">Memuat akun...</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="exportToCSV()" title="Download Laporan Excel" class="text-xs bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-white font-semibold transition-colors">
-                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Export Excel</span>
+            <div class="flex items-center gap-2">
+                <button onclick="exportToCSV()" class="owner-only text-xs bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-white font-semibold">
+                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Excel</span>
                 </button>
-                <button onclick="backupJSON()" title="Backup Data" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-slate-300 transition-colors">
+                <button onclick="backupJSON()" class="owner-only text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-slate-300">
                     <i data-lucide="download" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Backup</span>
                 </button>
-                <label title="Restore Data" class="cursor-pointer text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-slate-300 transition-colors">
+                <label class="owner-only cursor-pointer text-xs bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5 text-slate-300">
                     <i data-lucide="upload" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Restore</span>
                     <input type="file" accept=".json" onchange="restoreJSON(event)" class="hidden">
                 </label>
-                <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Keluar</span>
+                <button onclick="logout()" class="text-xs bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white px-3 py-2 rounded-lg flex items-center gap-1.5">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
                 </button>
             </div>
         </div>
@@ -56,12 +59,10 @@
     <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         
-        <!-- Statistik Ringkas (4 Kartu) -->
+        <!-- Statistik Ringkas (Owner melihat 4 kartu, Pelatih melihat 2 kartu) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-pink-100 text-brandPink flex items-center justify-center shrink-0">
-                    <i data-lucide="users" class="w-6 h-6"></i>
-                </div>
+                <div class="w-12 h-12 rounded-xl bg-pink-100 text-brandPink flex items-center justify-center shrink-0"><i data-lucide="users" class="w-6 h-6"></i></div>
                 <div>
                     <p class="text-xs text-slate-500 font-medium">Siswa Aktif</p>
                     <h3 id="statTotalStudents" class="text-2xl font-extrabold text-slate-900">0</h3>
@@ -69,29 +70,23 @@
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                <div class="w-12 h-12 rounded-xl bg-cyan-100 text-brandAqua flex items-center justify-center shrink-0"><i data-lucide="calendar-check" class="w-6 h-6"></i></div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium">Total Sisa Sesi</p>
+                    <h3 id="statRemainingSessions" class="text-2xl font-extrabold text-slate-900">0</h3>
                 </div>
+            </div>
+
+            <div class="owner-only bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
                 <div>
                     <p class="text-xs text-slate-500 font-medium">Pemasukan Lunas</p>
                     <h3 id="statRevenue" class="text-lg font-extrabold text-slate-900">Rp 0</h3>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="trending-down" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-500 font-medium">Pengeluaran & Honor</p>
-                    <h3 id="statExpense" class="text-lg font-extrabold text-slate-900">Rp 0</h3>
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-cyan-100 text-brandAqua flex items-center justify-center shrink-0">
-                    <i data-lucide="wallet" class="w-6 h-6"></i>
-                </div>
+            <div class="owner-only bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0"><i data-lucide="wallet" class="w-6 h-6"></i></div>
                 <div>
                     <p class="text-xs text-slate-500 font-medium">Laba Bersih Klub</p>
                     <h3 id="statNetProfit" class="text-lg font-extrabold text-emerald-600">Rp 0</h3>
@@ -99,19 +94,22 @@
             </div>
         </div>
 
-        <!-- Tab Navigasi Modul -->
+        <!-- Tab Navigasi -->
         <div class="flex overflow-x-auto gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-            <button onclick="switchTab('students')" id="tabBtn-students" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold bg-brandPink text-white flex items-center gap-2 whitespace-nowrap transition-all">
+            <button onclick="switchTab('students')" id="tabBtn-students" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold bg-brandPink text-white flex items-center gap-2 whitespace-nowrap">
                 <i data-lucide="users" class="w-4 h-4"></i> Data Siswa & Presensi
             </button>
-            <button onclick="switchTab('schedule')" id="tabBtn-schedule" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap transition-all">
+            <button onclick="switchTab('inbox')" id="tabBtn-inbox" class="owner-only tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="inbox" class="w-4 h-4"></i> Booking Inbox <span id="inboxBadge" class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+            </button>
+            <button onclick="switchTab('schedule')" id="tabBtn-schedule" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap">
                 <i data-lucide="calendar" class="w-4 h-4"></i> Jadwal Mingguan
             </button>
-            <button onclick="switchTab('coaches')" id="tabBtn-coaches" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap transition-all">
-                <i data-lucide="award" class="w-4 h-4"></i> Rekap Honor Pelatih
+            <button onclick="switchTab('coaches')" id="tabBtn-coaches" class="owner-only tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="award" class="w-4 h-4"></i> Honor Pelatih
             </button>
-            <button onclick="switchTab('finance')" id="tabBtn-finance" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap transition-all">
-                <i data-lucide="receipt" class="w-4 h-4"></i> Pengeluaran Operasional
+            <button onclick="switchTab('finance')" id="tabBtn-finance" class="owner-only tab-btn px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 flex items-center gap-2 whitespace-nowrap">
+                <i data-lucide="receipt" class="w-4 h-4"></i> Pengeluaran
             </button>
         </div>
 
@@ -120,26 +118,23 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Daftar Peserta & Presensi</h2>
-                    <p class="text-xs text-slate-500">Klik <b>"Hadir (-1)"</b> untuk mencatat absensi, progres siswa, dan honor pelatih otomatis.</p>
+                    <p class="text-xs text-slate-500">Gunakan <b>"Hadir (-1)"</b> untuk absensi, atau <b>"Reschedule"</b> jika libur hujan/sakit.</p>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="resetDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2.5 rounded-xl font-semibold transition-colors">
-                        Reset Demo
-                    </button>
-                    <button onclick="openModal('addModal')" class="bg-brandPink hover:bg-brandPinkHover text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-md shadow-pink-200 flex items-center gap-2 transition-all">
+                <div class="owner-only flex flex-wrap gap-2">
+                    <button onclick="resetDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2.5 rounded-xl font-semibold">Reset Demo</button>
+                    <button onclick="openModal('addModal')" class="bg-brandPink hover:bg-brandPinkHover text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-md shadow-pink-200 flex items-center gap-2">
                         <i data-lucide="plus" class="w-4 h-4"></i> Tambah Siswa
                     </button>
                 </div>
             </div>
 
-            <!-- Search & Filter -->
             <div class="grid sm:grid-cols-3 gap-4">
                 <div class="sm:col-span-2 relative">
                     <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-                    <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Cari nama siswa atau pelatih..." class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink">
+                    <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Cari nama siswa..." class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink">
                 </div>
                 <div>
-                    <select id="filterPool" onchange="renderTable()" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-brandPink">
+                    <select id="filterPool" onchange="renderTable()" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
                         <option value="ALL">Semua Lokasi Kolam</option>
                         <option value="Thursina IIBS">Thursina IIBS</option>
                         <option value="Wagir City Pool">Wagir City Pool</option>
@@ -149,17 +144,16 @@
                 </div>
             </div>
 
-            <!-- Tabel Siswa -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 text-xs uppercase text-slate-500 bg-slate-50">
-                            <th class="py-3.5 px-4 rounded-tl-xl">Nama Siswa</th>
+                            <th class="py-3.5 px-4">Nama Siswa</th>
                             <th class="py-3.5 px-4">Program & Kolam</th>
                             <th class="py-3.5 px-4">Pelatih & Jadwal</th>
                             <th class="py-3.5 px-4 text-center">Sisa Sesi</th>
-                            <th class="py-3.5 px-4">Pembayaran</th>
-                            <th class="py-3.5 px-4 text-right rounded-tr-xl">Aksi</th>
+                            <th class="owner-only py-3.5 px-4">Status & Kuitansi</th>
+                            <th class="py-3.5 px-4 text-right">Aksi & Sertifikat</th>
                         </tr>
                     </thead>
                     <tbody id="studentTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -167,37 +161,60 @@
             </div>
         </div>
 
-        <!-- ================= TAB 2: JADWAL MINGGUAN ================= -->
-        <div id="tab-schedule" class="tab-content hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <!-- ================= TAB 2: BOOKING INBOX (DARI HALAMAN DEPAN) ================= -->
+        <div id="tab-inbox" class="tab-content hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div>
-                <h2 class="text-xl font-bold text-slate-900">Papan Jadwal Mingguan</h2>
-                <p class="text-xs text-slate-500">Pemetaan jadwal berdasarkan hari untuk mencegah bentrok jam mengajar pelatih.</p>
+                <h2 class="text-xl font-bold text-slate-900">Antrian Pendaftar Website (Booking Inbox)</h2>
+                <p class="text-xs text-slate-500">Calon murid yang mengisi form di halaman depan otomatis muncul di sini.</p>
             </div>
-            <div id="scheduleBoard" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Diisi otomatis oleh admin.js -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-xs uppercase text-slate-500 bg-slate-50">
+                            <th class="py-3.5 px-4">Tgl Daftar</th>
+                            <th class="py-3.5 px-4">Nama & Usia</th>
+                            <th class="py-3.5 px-4">Program & Kolam</th>
+                            <th class="py-3.5 px-4">Request Jadwal</th>
+                            <th class="py-3.5 px-4 text-right">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inboxTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+                </table>
             </div>
         </div>
 
-        <!-- ================= TAB 3: REKAP HONOR PELATIH ================= -->
+        <!-- ================= TAB 3: JADWAL MINGGUAN ================= -->
+        <div id="tab-schedule" class="tab-content hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <h2 class="text-xl font-bold text-slate-900">Papan Jadwal Mingguan</h2>
+            <div id="scheduleBoard" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+        </div>
+
+<!-- ================= TAB 4: DATABASE & HONOR PELATIH ================= -->
         <div id="tab-coaches" class="tab-content hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Rekap Honor / Gaji Pelatih</h2>
-                    <p class="text-xs text-slate-500">Terhitung otomatis berdasarkan log kehadiran mengajar yang tercatat.</p>
+                    <h2 class="text-xl font-bold text-slate-900">Database Pelatih & Rekap Honor</h2>
+                    <p class="text-xs text-slate-500">Kelola profil instruktur, nomor rekening transfer, dan akumulasi sesi mengajar.</p>
                 </div>
-                <button onclick="resetCoachPayroll()" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 px-4 py-2.5 rounded-xl font-bold">
-                    Reset Hitungan Bulan Baru
-                </button>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="resetCoachPayroll()" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 px-3.5 py-2.5 rounded-xl font-bold">
+                        Reset Sesi Bulan Baru
+                    </button>
+                    <button onclick="openCoachModal()" class="bg-brandPink hover:bg-brandPinkHover text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl shadow-md shadow-pink-200 flex items-center gap-1.5">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Pelatih
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 text-xs uppercase text-slate-500 bg-slate-50">
-                            <th class="py-3.5 px-4">Nama Pelatih</th>
-                            <th class="py-3.5 px-4 text-center">Total Sesi Mengajar</th>
+                            <th class="py-3.5 px-4">Profil Pelatih</th>
+                            <th class="py-3.5 px-4">Rekening / E-Wallet</th>
+                            <th class="py-3.5 px-4 text-center">Sesi Mengajar</th>
                             <th class="py-3.5 px-4">Tarif / Sesi</th>
-                            <th class="py-3.5 px-4">Total Honor Diterima</th>
+                            <th class="py-3.5 px-4">Total Honor</th>
                             <th class="py-3.5 px-4 text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -206,24 +223,20 @@
             </div>
         </div>
 
-        <!-- ================= TAB 4: PENGELUARAN OPERASIONAL ================= -->
+        <!-- ================= TAB 5: PENGELUARAN ================= -->
         <div id="tab-finance" class="tab-content hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Catatan Pengeluaran Klub</h2>
-                    <p class="text-xs text-slate-500">Catat biaya tiket masuk kolam pelatih, alat bantu renang, atau promosi.</p>
-                </div>
-                <button onclick="openModal('expenseModal')" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold px-4 py-2.5 rounded-xl flex items-center gap-2">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold text-slate-900">Pengeluaran Operasional Klub</h2>
+                <button onclick="openModal('expenseModal')" class="bg-slate-900 text-white text-sm font-bold px-4 py-2 rounded-xl flex items-center gap-1.5">
                     <i data-lucide="plus" class="w-4 h-4"></i> Catat Pengeluaran
                 </button>
             </div>
-
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 text-xs uppercase text-slate-500 bg-slate-50">
                             <th class="py-3.5 px-4">Tanggal</th>
-                            <th class="py-3.5 px-4">Keterangan Pengeluaran</th>
+                            <th class="py-3.5 px-4">Keterangan</th>
                             <th class="py-3.5 px-4">Kategori</th>
                             <th class="py-3.5 px-4">Nominal</th>
                             <th class="py-3.5 px-4 text-right">Hapus</th>
@@ -233,22 +246,22 @@
                 </table>
             </div>
         </div>
-
     </main>
 
-    <!-- ================= MODAL 1: TAMBAH SISWA ================= -->
+    <!-- ================= MODAL TAMBAH / TERIMA SISWA ================= -->
     <div id="addModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-slate-900">Input Pendaftaran Siswa</h3>
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="addModalTitle" class="text-xl font-bold text-slate-900">Input Pendaftaran Siswa</h3>
                 <button onclick="closeModal('addModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
             <form id="addStudentForm" onsubmit="addStudent(event)" class="space-y-4">
+                <input type="hidden" id="fromInboxId">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nama Siswa</label>
-                        <input type="text" id="inName" required placeholder="Contoh: Kenzo (5 Thn)" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                        <input type="text" id="inName" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">No. WhatsApp Wali</label>
@@ -278,19 +291,16 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Pelatih</label>
-                        <input type="text" id="inCoach" required placeholder="Contoh: Coach Rizal" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Pelatih</label>
+                        <select id="inCoach" onchange="autoFillCoachFee()" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
+                            <!-- Diisi otomatis dari Database Pelatih -->
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Hari Latihan</label>
                         <select id="inDay" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
-                            <option value="Senin">Senin</option>
-                            <option value="Selasa">Selasa</option>
-                            <option value="Rabu">Rabu</option>
-                            <option value="Kamis">Kamis</option>
-                            <option value="Jumat">Jumat</option>
-                            <option value="Sabtu" selected>Sabtu</option>
-                            <option value="Minggu">Minggu</option>
+                            <option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option><option value="Jumat">Jumat</option><option value="Sabtu" selected>Sabtu</option><option value="Minggu">Minggu</option>
                         </select>
                     </div>
                 </div>
@@ -310,74 +320,70 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Paket Sesi</label>
                         <select id="inSessions" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
-                            <option value="4">4 Sesi</option>
-                            <option value="8">8 Sesi</option>
-                            <option value="1">1 Sesi</option>
+                            <option value="4">4 Sesi</option><option value="8">8 Sesi</option><option value="1">1 Sesi</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Biaya Paket (Rp)</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Biaya (Rp)</label>
                         <input type="number" id="inFee" value="460000" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Status Bayar</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
                         <select id="inPaid" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
-                            <option value="Lunas">Lunas</option>
-                            <option value="Belum Lunas">Belum Lunas</option>
+                            <option value="Lunas">Lunas</option><option value="Belum Lunas">Belum Lunas</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="pt-4 flex justify-end gap-3">
-                    <button type="button" onclick="closeModal('addModal')" class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Batal</button>
-                    <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-brandPink hover:bg-brandPinkHover text-white rounded-xl shadow-md">Simpan Data</button>
+                    <button type="button" onclick="closeModal('addModal')" class="px-5 py-2.5 text-sm font-semibold text-slate-600">Batal</button>
+                    <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-brandPink text-white rounded-xl shadow-md">Simpan Siswa</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ================= MODAL 2: PRESENSI & CATATAN PROGRES ================= -->
+    <!-- ================= MODAL PRESENSI & RESCHEDULE ================= -->
     <div id="attendanceModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-slate-900">Catat Kehadiran & Progres</h3>
+                <h3 id="attModalTitle" class="text-lg font-bold text-slate-900">Catat Kehadiran</h3>
                 <button onclick="closeModal('attendanceModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <p id="attStudentName" class="text-sm font-bold text-brandPink mb-4"></p>
 
             <form onsubmit="submitAttendance(event)" class="space-y-4">
                 <input type="hidden" id="attStudentId">
+                <input type="hidden" id="attMode" value="hadir">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Latihan</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
                     <input type="date" id="attDate" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Progres / Evaluasi Pelatih</label>
-                    <textarea id="attNotes" rows="3" required placeholder="Contoh: Sudah berani menyelam ambil koin, pertemuan berikutnya latihan pernapasan gaya bebas." class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200"></textarea>
+                    <label id="attNotesLabel" class="block text-xs font-bold text-slate-700 mb-1">Catatan Progres Pelatih</label>
+                    <textarea id="attNotes" rows="3" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200"></textarea>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal('attendanceModal')" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-xl">Batal</button>
-                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-brandPink text-white rounded-xl">Simpan Presensi (-1 Sesi)</button>
+                    <button type="button" onclick="closeModal('attendanceModal')" class="px-4 py-2 text-sm text-slate-600">Batal</button>
+                    <button type="submit" id="attSubmitBtn" class="px-5 py-2 text-sm font-bold bg-brandPink text-white rounded-xl">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ================= MODAL 3: RIWAYAT PERTEMUAN SISWA ================= -->
+    <!-- ================= MODAL RIWAYAT LOG ================= -->
     <div id="historyModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Log Riwayat & Progres</h3>
+                    <h3 class="text-lg font-bold text-slate-900">Log Pertemuan & Reschedule</h3>
                     <p id="histStudentTitle" class="text-xs text-brandAqua font-semibold"></p>
                 </div>
                 <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            
             <div id="historyList" class="space-y-3 my-4"></div>
-
             <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
-                <button id="btnShareProgressWa" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
+                <button id="btnShareProgressWa" class="bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5">
                     <i data-lucide="share-2" class="w-4 h-4"></i> Kirim Laporan ke WA Wali
                 </button>
                 <button onclick="closeModal('historyModal')" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl">Tutup</button>
@@ -385,40 +391,167 @@
         </div>
     </div>
 
-    <!-- ================= MODAL 4: TAMBAH PENGELUARAN ================= -->
-    <div id="expenseModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-slate-900">Catat Pengeluaran Operasional</h3>
-                <button onclick="closeModal('expenseModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <form onsubmit="addExpense(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                    <input type="date" id="expDate" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+    <!-- ================= MODAL KUITANSI DIGITAL (INVOICE) ================= -->
+    <div id="receiptModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
+            <div id="printableArea" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 bg-white relative overflow-hidden">
+                <div class="flex justify-between items-start border-b border-slate-200 pb-4 mb-4">
+                    <div>
+                        <h3 class="text-xl font-black text-brandPink">SWIMMO</h3>
+                        <p class="text-[11px] text-slate-500">Les Renang Private & Group Malang</p>
+                        <p class="text-[10px] text-slate-400">WA: +62 851-9628-4611 | @swimmo.mlg</p>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 font-extrabold text-xs px-3 py-1 rounded-full border border-emerald-300">LUNAS</span>
                 </div>
+
+                <div class="space-y-2 text-xs text-slate-700 mb-6">
+                    <div class="flex justify-between"><span class="text-slate-400">No. Kuitansi:</span><span id="recNo" class="font-bold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Tanggal Cetak:</span><span id="recDate" class="font-semibold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Nama Peserta:</span><span id="recName" class="font-bold text-slate-900"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Program Kelas:</span><span id="recProgram" class="font-semibold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Lokasi Kolam:</span><span id="recPool" class="font-semibold"></span></div>
+                    <div class="flex justify-between"><span class="text-slate-400">Jumlah Paket:</span><span id="recSessions" class="font-semibold"></span></div>
+                </div>
+
+                <div class="bg-slate-900 text-white p-4 rounded-xl flex justify-between items-center">
+                    <span class="text-xs text-slate-300">Total Pembayaran</span>
+                    <span id="recAmount" class="text-lg font-extrabold text-pink-400"></span>
+                </div>
+                <p class="text-[10px] text-center text-slate-400 mt-4">Terima kasih telah mempercayakan latihan renang bersama Swimmo Malang.</p>
+            </div>
+
+            <div class="flex justify-between gap-2 mt-5">
+                <button onclick="window.print()" class="flex-1 bg-slate-900 text-white text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-1.5">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Cetak / Simpan PDF
+                </button>
+                <button onclick="closeModal('receiptModal')" class="px-4 py-3 text-xs font-bold bg-slate-100 text-slate-600 rounded-xl">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL E-SERTIFIKAT KELULUSAN ================= -->
+    <div id="certModal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl">
+            <div class="flex flex-wrap gap-2 justify-between items-center mb-4">
+                <h3 class="text-base font-bold text-slate-900">Generator E-Sertifikat Kelulusan</h3>
+                <select id="certLevelSelect" onchange="updateCertLevel(this.value)" class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 font-semibold">
+                    <option value="Level 1: Water Confidence & Breathing">Level 1: Water Confidence & Breathing</option>
+                    <option value="Level 2: Basic Gliding & Freestyle Kick">Level 2: Basic Gliding & Freestyle Kick</option>
+                    <option value="Level 3: Breaststroke (Gaya Dada) 15 Meter">Level 3: Breaststroke (Gaya Dada) 15 Meter</option>
+                    <option value="Level 4: Freestyle (Gaya Bebas) 25 Meter">Level 4: Freestyle (Gaya Bebas) 25 Meter</option>
+                </select>
+            </div>
+
+            <!-- Area Sertifikat Siap Print / Screenshot -->
+            <div id="printableArea" class="border-8 border-double border-brandAqua rounded-2xl p-8 bg-gradient-to-br from-pink-50 via-white to-cyan-50 text-center relative">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-brandPink to-brandAqua text-white font-black text-xl flex items-center justify-center mx-auto mb-2 shadow">S</div>
+                <p class="text-xs font-bold tracking-[0.25em] text-brandAqua uppercase">Swimmo Swim Course Malang</p>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Certificate of Achievement</h2>
+                <p class="text-xs text-slate-500 mt-3">Diberikan dengan bangga kepada:</p>
+                
+                <h3 id="certStudentName" class="font-serif italic text-3xl sm:text-4xl text-brandPink font-bold my-3 border-b-2 border-pink-200 inline-block px-8 pb-1">Nama Siswa</h3>
+                
+                <p class="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                    Telah berhasil menyelesaikan evaluasi keterampilan renang dengan sangat baik pada tingkatan:
+                </p>
+                <div id="certLevelText" class="mt-2 inline-block bg-slate-900 text-white text-xs sm:text-sm font-bold px-5 py-2 rounded-full">
+                    Level 1: Water Confidence & Breathing
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 mt-8 pt-4 text-xs text-slate-600">
+                    <div>
+                        <p id="certDate" class="font-bold text-slate-800">Malang, 12 November 2026</p>
+                        <div class="w-32 h-px bg-slate-300 mx-auto my-2"></div>
+                        <p class="text-[11px] text-slate-400">Tanggal Kelulusan</p>
+                    </div>
+                    <div>
+                        <p id="certCoachName" class="font-bold text-slate-800">Coach Rizal</p>
+                        <div class="w-32 h-px bg-slate-300 mx-auto my-2"></div>
+                        <p class="text-[11px] text-slate-400">Instruktur Swimmo Malang</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between gap-2 mt-5">
+                <button onclick="window.print()" class="flex-1 bg-brandPink hover:bg-brandPinkHover text-white text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Cetak / Simpan E-Sertifikat (PDF)
+                </button>
+                <button onclick="closeModal('certModal')" class="px-5 py-3 text-xs font-bold bg-slate-100 text-slate-600 rounded-xl">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL TAMBAH PENGELUARAN ================= -->
+    <div id="expenseModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Catat Pengeluaran</h3>
+            <form onsubmit="addExpense(event)" class="space-y-4">
+                <input type="date" id="expDate" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                <input type="text" id="expDesc" required placeholder="Keterangan (misal: Tiket kolam pelatih)" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                <div class="grid grid-cols-2 gap-3">
+                    <select id="expCat" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
+                        <option value="Tiket Kolam">Tiket Kolam</option><option value="Alat Renang">Alat Renang</option><option value="Promosi">Promosi</option>
+                    </select>
+                    <input type="number" id="expAmount" required placeholder="Nominal (Rp)" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('expenseModal')" class="px-4 py-2 text-sm text-slate-600">Batal</button>
+                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-slate-900 text-white rounded-xl">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL TAMBAH / EDIT PELATIH ================= -->
+    <div id="coachModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="coachModalTitle" class="text-xl font-bold text-slate-900">Tambah Data Pelatih</h3>
+                <button onclick="closeModal('coachModal')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+
+            <form onsubmit="saveCoach(event)" class="space-y-4">
+                <input type="hidden" id="editCoachId">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan</label>
-                    <input type="text" id="expDesc" required placeholder="Contoh: Tiket masuk kolam BBS Coach Rizal" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap / Panggilan Pelatih</label>
+                    <input type="text" id="cName" required placeholder="Contoh: Coach Rizal" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
-                        <select id="expCat" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
-                            <option value="Tiket Kolam">Tiket Kolam</option>
-                            <option value="Alat Renang">Alat Renang</option>
-                            <option value="Promosi / Ads">Promosi / Ads</option>
-                            <option value="Lain-lain">Lain-lain</option>
-                        </select>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">No. WhatsApp</label>
+                        <input type="text" id="cWa" required placeholder="628123456789" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal (Rp)</label>
-                        <input type="number" id="expAmount" required placeholder="25000" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Spesialisasi</label>
+                        <select id="cSpec" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
+                            <option value="All Level (Toddler & Adult)">All Level</option>
+                            <option value="Toddler & Kids">Toddler & Kids</option>
+                            <option value="Dewasa & Pemula">Dewasa & Pemula</option>
+                            <option value="Teknik & Prestasi">Teknik & Prestasi</option>
+                        </select>
                     </div>
                 </div>
-                <div class="flex justify-end gap-2 pt-3">
-                    <button type="button" onclick="closeModal('expenseModal')" class="px-4 py-2 text-sm text-slate-600">Batal</button>
-                    <button type="submit" class="px-5 py-2 text-sm font-bold bg-slate-900 text-white rounded-xl">Simpan</button>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tarif Honor / Sesi (Rp)</label>
+                        <input type="number" id="cFee" value="60000" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Status Pelatih</label>
+                        <select id="cStatus" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Cuti">Cuti / Non-Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Info Rekening / E-Wallet Transfer</label>
+                    <input type="text" id="cBank" required placeholder="Contoh: BCA 1234567890 a.n. Rizal" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200">
+                </div>
+
+                <div class="pt-3 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('coachModal')" class="px-4 py-2.5 text-sm font-semibold text-slate-600">Batal</button>
+                    <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-brandPink text-white rounded-xl shadow-md">Simpan Pelatih</button>
                 </div>
             </form>
         </div>

@@ -53,21 +53,9 @@ function updatePersonCount(val) {
 }
 
 function calculateTotal() {
-    let baseRate = 100000; // Tarif dasar per sesi
-    
-    if (currentType === 'private') {
-        baseRate = 115000;
-    } else {
-        baseRate = 85000;
-    }
-
+    let baseRate = currentType === 'private' ? 115000 : 85000;
     let total = baseRate * currentSession * currentPersons;
-    
-    // Diskon 10% untuk paket 8 sesi
-    if (currentSession === 8) {
-        total = total * 0.9;
-    }
-
+    if (currentSession === 8) total = total * 0.9;
     document.getElementById('totalPrice').innerText = 'Rp ' + total.toLocaleString('id-ID');
 }
 
@@ -77,21 +65,52 @@ function selectProgram(progName) {
 
 function bookWithCalculator() {
     const bookingSec = document.getElementById('booking');
-    if (bookingSec) {
-        bookingSec.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Pengiriman Formulir Otomatis ke WhatsApp
+// Pengiriman Formulir ke Booking Inbox & Tampilkan Modal Konfirmasi
 function sendToWhatsApp(e) {
     e.preventDefault();
     const name = document.getElementById('fullName').value;
     const age = document.getElementById('age').value;
     const program = document.getElementById('programSelect').value;
     const location = document.getElementById('locationSelect').value;
-    const time = document.getElementById('preferredTime').value;
+    const time = document.getElementById('preferredTime').value || 'Fleksibel';
 
-    const text = `Halo Admin Swimmo Malang 👋%0A%0ASaya ingin mendaftar Les Renang dengan data berikut:%0A- *Nama*: ${name}%0A- *Usia*: ${age}%0A- *Program*: ${program}%0A- *Lokasi Kolam*: ${location}%0A- *Rencana Jadwal*: ${time}%0A%0AMohon info ketersediaan jadwalnya ya, terima kasih!`;
+    // Buat Kode Booking Unik (contoh: #SWM-4821)
+    const bookingCode = '#SWM-' + Math.floor(1000 + Math.random() * 9000);
 
-    window.open(`https://wa.me/6285196284611?text=${text}`, '_blank');
+    // 1. Simpan otomatis ke Antrian Booking Inbox Admin (LocalStorage)
+    const inbox = JSON.parse(localStorage.getItem('swimmo_inbox')) || [];
+    inbox.unshift({
+        id: Date.now(),
+        code: bookingCode,
+        date: new Date().toISOString().slice(0, 10),
+        name: `${name} (${age})`,
+        program: program,
+        pool: location.replace(' Pool', ''),
+        preferredTime: time,
+        wa: '628'
+    });
+    localStorage.setItem('swimmo_inbox', JSON.stringify(inbox));
+
+    // 2. Isi data ke dalam Modal Konfirmasi
+    document.getElementById('modalBookingCode').innerText = bookingCode;
+    document.getElementById('modalBookingName').innerText = `${name} (${age})`;
+    document.getElementById('modalBookingProgram').innerText = program;
+    document.getElementById('modalBookingPool').innerText = location;
+    document.getElementById('modalBookingTime').innerText = time;
+
+    // 3. Siapkan link WhatsApp dengan Kode Booking
+    const text = `Halo Admin Swimmo Malang 👋%0A%0ASaya sudah mengisi formulir pendaftaran online dengan rincian:%0A- *Kode Booking*: ${bookingCode}%0A- *Nama*: ${name}%0A- *Usia*: ${age}%0A- *Program*: ${program}%0A- *Lokasi Kolam*: ${location}%0A- *Rencana Jadwal*: ${time}%0A%0AMohon info ketersediaan jadwal pelatihnya ya, terima kasih!`;
+    document.getElementById('modalWaDirectBtn').href = `https://wa.me/6285196284611?text=${text}`;
+
+    // 4. Tampilkan Modal & Reset Form
+    document.getElementById('bookingSuccessModal').classList.remove('hidden');
+    lucide.createIcons();
+    document.getElementById('bookingForm').reset();
+}
+
+function closeBookingModal() {
+    document.getElementById('bookingSuccessModal').classList.add('hidden');
 }

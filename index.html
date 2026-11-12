@@ -322,9 +322,15 @@
                 </div>
 
                 <form id="bookingForm" onsubmit="sendToWhatsApp(event)" class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap Peserta</label>
-                        <input type="text" id="fullName" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap Peserta</label>
+                            <input type="text" id="fullName" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">No. WhatsApp Aktif</label>
+                            <input type="tel" id="waNumber" required placeholder="Contoh: 081234567890" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -345,21 +351,21 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Pilihan Lokasi Kolam</label>
                         <select id="locationSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors bg-white">
-                            <option value="Thursina IIBS Pool">Thursina IIBS Pool</option>
+                            <option value="Thursina IIBS">Thursina IIBS</option>
                             <option value="Wagir City Pool">Wagir City Pool</option>
                             <option value="BBS Pool">BBS Pool</option>
-                            <option value="Tsurraya Flexy Pool">Tsurraya Flexy Pool</option>
-                            <option value="Kolam Renang Rumah / Apartment">Kolam Private Sendiri</option>
+                            <option value="Tsurraya Flexy">Tsurraya Flexy</option>
+                            <option value="Kolam Private Sendiri">Kolam Private Sendiri</option>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">Rencana Hari & Jam</label>
-                        <input type="text" id="preferredTime" placeholder="Contoh: Sabtu & Minggu Pagi" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                        <input type="text" id="preferredTime" required placeholder="Contoh: Sabtu Pagi jam 08.00" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
                     </div>
 
                     <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-lg">
-                        <i data-lucide="message-circle" class="w-6 h-6"></i> Kirim ke WhatsApp Admin
+                        <i data-lucide="message-circle" class="w-6 h-6"></i> Daftar & Konfirmasi WhatsApp
                     </button>
                 </form>
             </div>
@@ -403,6 +409,58 @@
         </div>
     </footer>
 
+    <!-- Modal Konfirmasi Pendaftaran Berhasil -->
+    <div id="bookingSuccessModal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-pink-100 text-center relative animate-[fadeIn_0.2s_ease-out]">
+            
+            <!-- Ikon Sukses -->
+            <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-inner">
+                <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold text-slate-900">Pendaftaran Tercatat!</h3>
+            <p class="text-xs text-slate-500 mt-1">Data Anda sudah masuk ke sistem antrian admin Swimmo Malang.</p>
+
+            <!-- Kartu Ringkasan Tiket Booking -->
+            <div class="my-6 bg-slate-50 rounded-2xl p-4 border-2 border-dashed border-slate-200 text-left space-y-2.5 text-xs">
+                <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+                    <span class="text-slate-400 font-medium">Kode Booking</span>
+                    <span id="modalBookingCode" class="font-black text-brandPink text-sm tracking-wider">#SWM-0000</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Nama Peserta:</span>
+                    <span id="modalBookingName" class="font-bold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Program Kelas:</span>
+                    <span id="modalBookingProgram" class="font-bold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Lokasi Kolam:</span>
+                    <span id="modalBookingPool" class="font-bold text-brandAqua">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Rencana Jadwal:</span>
+                    <span id="modalBookingTime" class="font-semibold text-slate-700">-</span>
+                </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 mb-5 leading-relaxed">
+                Silakan lanjutkan konfirmasi ke <b>WhatsApp Admin</b> untuk pengecekan slot jam kosong pelatih.
+            </p>
+
+            <!-- Tombol Aksi -->
+            <div class="space-y-2.5">
+                <a id="modalWaDirectBtn" href="#" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-200 transition-all flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    <span>Lanjut Konfirmasi via WhatsApp</span>
+                </a>
+                <button type="button" onclick="closeBookingModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2.5 rounded-xl text-xs transition-colors">
+                    Tutup & Kembali ke Halaman Utama
+                </button>
+            </div>
+        </div>
+    </div>
     <!-- External JavaScript -->
     <script src="script.js"></script>
 </body>
