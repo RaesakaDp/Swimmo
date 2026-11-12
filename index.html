@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swimmo - Les Renang Private & Group Malang Raya</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPink: '#FF4D8D',
+                        brandPinkHover: '#E03B75',
+                        brandAqua: '#00B4D8',
+                        brandAquaDark: '#0077B6',
+                        brandLight: '#FFF0F5',
+                        brandDark: '#1A1A2E'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-pink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-brandPink to-brandAqua flex items-center justify-center text-white font-extrabold text-xl shadow-md border-2 border-white">
+                        S
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black text-brandPink tracking-wider block leading-tight">SWIMMO</span>
+                        <span class="text-xs font-semibold text-brandAqua tracking-widest uppercase">Les Renang Malang</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-8 font-medium text-slate-600">
+                    <a href="#about" class="hover:text-brandPink transition-colors">Tentang Kami</a>
+                    <a href="#programs" class="hover:text-brandPink transition-colors">Program</a>
+                    <a href="#calculator" class="hover:text-brandPink transition-colors">Kalkulator Biaya</a>
+                    <a href="#locations" class="hover:text-brandPink transition-colors">Lokasi Kolam</a>
+                    <a href="#booking" class="bg-brandPink hover:bg-brandPinkHover text-white px-5 py-2.5 rounded-full font-semibold shadow-md shadow-pink-200 transition-all flex items-center gap-2">
+                        <i data-lucide="calendar"></i>
+                        Daftar Sekarang
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-slate-700 hover:text-brandPink focus:outline-none">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" class="block py-2 text-slate-600 hover:text-brandPink font-medium">Tentang Kami</a>
+            <a href="#programs" class="block py-2 text-slate-600 hover:text-brandPink font-medium">Program</a>
+            <a href="#calculator" class="block py-2 text-slate-600 hover:text-brandPink font-medium">Kalkulator Biaya</a>
+            <a href="#locations" class="block py-2 text-slate-600 hover:text-brandPink font-medium">Lokasi Kolam</a>
+            <a href="#booking" class="block text-center bg-brandPink text-white py-3 rounded-xl font-semibold shadow-md">Daftar Sekarang</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative wave-bg text-white py-20 lg:py-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider text-white border border-white/30">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-pink-300"></i> Area Malang Raya
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                        Belajar Renang <br><span class="text-pink-300">Seru, Aman & Private!</span>
+                    </h1>
+                    <p class="text-white/90 text-lg font-light max-w-xl">
+                        Pelatihan renang profesional untuk <span class="font-semibold text-yellow-300">Toddler hingga Adult</span> di Malang Raya. Jadwal fleksibel, pelatih sabar, dan metode menyenangkan!
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                        <a href="#calculator" class="bg-white text-brandPink hover:bg-slate-100 font-bold px-8 py-4 rounded-full shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="calculator" class="w-5 h-5"></i> Cek Estimasi Biaya
+                        </a>
+                        <a href="https://wa.me/6285196284611?text=Halo%20Swimmo,%20saya%20ingin%20tanya%20info%20les%20renang" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-4 rounded-full shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i> Chat WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Floating Cards -->
+                <div class="relative flex justify-center">
+                    <div class="glass-card text-slate-800 p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/40 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-pink-100 flex items-center justify-center text-brandPink">
+                                <i data-lucide="award" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Swimmo Course</h3>
+                                <p class="text-slate-500 text-sm">@swimmo.mlg</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">✓</div>
+                                <span class="font-medium text-slate-700">Kelas Toddler (Anak-anak)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">✓</div>
+                                <span class="font-medium text-slate-700">Kelas Adult (Dewasa/Pemula)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">✓</div>
+                                <span class="font-medium text-slate-700">Pilihan Private & Group</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">✓</div>
+                                <span class="font-medium text-slate-700">Lokasi Kolam Bermitra Lengkap</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Section -->
+    <section id="programs" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Program Pilihan Renang</h2>
+                <p class="text-slate-600">Pilih kurikulum yang sesuai dengan tingkatan usia dan kebutuhan Kamu.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Program 1 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all border-t-4 border-t-brandPink group">
+                    <div class="w-14 h-14 rounded-2xl bg-pink-50 text-brandPink flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="baby" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Toddler & Kids</h3>
+                    <p class="text-slate-600 text-sm mb-6">Mengenalkan keberanian air, teknik pernapasan dasar, pelampung, dan gerakan meluncur secara ceria.</p>
+                    <ul class="space-y-2 mb-8 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Usia 2 - 10 Tahun</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Pendampingan Ekstra Sabar</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Game Water Confidence</li>
+                    </ul>
+                    <a href="#booking" onclick="selectProgram('Toddler & Kids')" class="block text-center w-full py-3 bg-pink-50 text-brandPink font-bold rounded-xl hover:bg-brandPink hover:text-white transition-colors">Pilih Program</a>
+                </div>
+
+                <!-- Program 2 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all border-t-4 border-t-brandAqua group relative">
+                    <div class="absolute -top-4 right-6 bg-brandAqua text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Favorit</div>
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-brandAqua flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="user" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Private Dewasa</h3>
+                    <p class="text-slate-600 text-sm mb-6">Program bagi remaja & dewasa yang ingin mengatasi phobia air atau menguasai gaya dad / bebas dari nol.</p>
+                    <ul class="space-y-2 mb-8 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Usia Remaja & Dewasa</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Pelatih Pria & Wanita Available</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Fokus Latihan Personal</li>
+                    </ul>
+                    <a href="#booking" onclick="selectProgram('Private Dewasa')" class="block text-center w-full py-3 bg-cyan-50 text-brandAquaDark font-bold rounded-xl hover:bg-brandAqua hover:text-white transition-colors">Pilih Program</a>
+                </div>
+
+                <!-- Program 3 -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all border-t-4 border-t-purple-500 group">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="users" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Group Swim Class</h3>
+                    <p class="text-slate-600 text-sm mb-6">Latihan bersama teman / saudara dalam grup kecil agar belajar jadi lebih seru dan hemat biaya.</p>
+                    <ul class="space-y-2 mb-8 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Maksimal 3-4 Peserta/Grup</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Jadwal Disepakati Bersama</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Lebih Hemat Per Orang</li>
+                    </ul>
+                    <a href="#booking" onclick="selectProgram('Group Swim Class')" class="block text-center w-full py-3 bg-purple-50 text-purple-600 font-bold rounded-xl hover:bg-purple-600 hover:text-white transition-colors">Pilih Program</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Calculator Section -->
+    <section id="calculator" class="py-20 bg-gradient-to-b from-white to-pink-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-brandPink font-bold text-sm tracking-widest uppercase">Simulasi Biaya</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Kalkulator Biaya Les</h2>
+                <p class="text-slate-600 mt-2">Hitung perkiraan biaya investasi les renang Kamu sesuai paket pilihan.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-10 border border-pink-100">
+                <div class="space-y-8">
+                    <!-- Step 1: Tipe Kelas -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-3">1. Pilih Tipe Kelas</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button type="button" id="typePrivate" onclick="setCalcType('private')" class="calc-type-btn py-3 px-4 rounded-xl border-2 border-brandPink bg-pink-50 text-brandPink font-bold text-center transition-all">
+                                1-on-1 Private
+                            </button>
+                            <button type="button" id="typeGroup" onclick="setCalcType('group')" class="calc-type-btn py-3 px-4 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-center hover:border-brandPink transition-all">
+                                Group (2-3 Orang)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Jumlah Sesi -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-3">2. Jumlah Sesi Pertemuan</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" id="session4" onclick="setCalcSession(4)" class="calc-session-btn py-3 rounded-xl border-2 border-brandPink bg-pink-50 text-brandPink font-bold text-center">
+                                4 Sesi
+                            </button>
+                            <button type="button" id="session8" onclick="setCalcSession(8)" class="calc-session-btn py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-center">
+                                8 Sesi
+                            </button>
+                            <button type="button" id="session1" onclick="setCalcSession(1)" class="calc-session-btn py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-center">
+                                Tryout (1 Sesi)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Jumlah Peserta -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-bold text-slate-700">3. Jumlah Peserta</label>
+                            <span id="personCountText" class="text-brandPink font-bold">1 Orang</span>
+                        </div>
+                        <input type="range" id="personRange" min="1" max="4" value="1" oninput="updatePersonCount(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brandPink">
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <!-- Result Box -->
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-slate-400 text-xs uppercase tracking-wider block">Estimasi Total Biaya</span>
+                            <span id="totalPrice" class="text-3xl sm:text-4xl font-extrabold text-pink-400">Rp 450.000</span>
+                            <span class="text-xs text-slate-400 block mt-1">*Belum termasuk tiket masuk kolam pelatih & murid</span>
+                        </div>
+                        <button onclick="bookWithCalculator()" class="w-full sm:w-auto bg-brandPink hover:bg-brandPinkHover text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i> Ambil Paket Ini
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="locations" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brandAqua font-bold text-sm tracking-widest uppercase">Lokasi Latihan</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Kolam Renang Mitra di Malang</h2>
+                <p class="text-slate-600">Pilih kolam terdekat dari lokasi Kamu di Malang Raya.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Location 1 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-brandAqua transition-all text-center group">
+                    <div class="w-12 h-12 rounded-full bg-cyan-100 text-brandAqua flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-1">Thursina IIBS</h4>
+                    <p class="text-slate-500 text-xs">Area Dau / Karangploso Malang</p>
+                </div>
+
+                <!-- Location 2 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-brandAqua transition-all text-center group">
+                    <div class="w-12 h-12 rounded-full bg-cyan-100 text-brandAqua flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-1">Wagir City Pool</h4>
+                    <p class="text-slate-500 text-xs">Area Wagir Malang Kabupaten</p>
+                </div>
+
+                <!-- Location 3 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-brandAqua transition-all text-center group">
+                    <div class="w-12 h-12 rounded-full bg-cyan-100 text-brandAqua flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-1">BBS Pool</h4>
+                    <p class="text-slate-500 text-xs">Area Malang Kota / Sukun</p>
+                </div>
+
+                <!-- Location 4 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-brandAqua transition-all text-center group">
+                    <div class="w-12 h-12 rounded-full bg-cyan-100 text-brandAqua flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-1">Tsurraya Flexy</h4>
+                    <p class="text-slate-500 text-xs">Area Malang Kota / Lowokwaru</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section id="booking" class="py-20 wave-bg text-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card text-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/50">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-extrabold text-slate-900">Form Pendaftaran Les</h2>
+                    <p class="text-slate-500 text-sm mt-1">Isi formulir di bawah untuk konfirmasi jadwal via WhatsApp</p>
+                </div>
+
+                <form id="bookingForm" onsubmit="sendToWhatsApp(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap Peserta</label>
+                        <input type="text" id="fullName" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Usia Peserta</label>
+                            <input type="text" id="age" required placeholder="Misal: 7 Tahun" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Pilihan Program</label>
+                            <select id="programSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors bg-white">
+                                <option value="Toddler & Kids">Toddler & Kids</option>
+                                <option value="Private Dewasa">Private Dewasa</option>
+                                <option value="Group Swim Class">Group Swim Class</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Pilihan Lokasi Kolam</label>
+                        <select id="locationSelect" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors bg-white">
+                            <option value="Thursina IIBS Pool">Thursina IIBS Pool</option>
+                            <option value="Wagir City Pool">Wagir City Pool</option>
+                            <option value="BBS Pool">BBS Pool</option>
+                            <option value="Tsurraya Flexy Pool">Tsurraya Flexy Pool</option>
+                            <option value="Kolam Renang Rumah / Apartment">Kolam Private Sendiri</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Rencana Hari & Jam</label>
+                        <input type="text" id="preferredTime" placeholder="Contoh: Sabtu & Minggu Pagi" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brandPink transition-colors">
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-lg">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i> Kirim ke WhatsApp Admin
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-2xl font-black text-brandPink">SWIMMO</h3>
+                <p class="text-slate-400 text-sm">Swimmo Les Renang Malang Raya</p>
+                <p class="text-slate-500 text-xs mt-1">Based in Malang Raya, Jawa Timur</p>
+            </div>
+
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="https://instagram.com/swimmo.mlg" target="_blank" class="hover:text-brandPink transition-colors flex items-center gap-1 text-sm">
+                    <i data-lucide="instagram" class="w-5 h-5"></i> @swimmo.mlg
+                </a>
+                <span>•</span>
+                <a href="https://wa.me/6285196284611" target="_blank" class="hover:text-emerald-400 transition-colors flex items-center gap-1 text-sm">
+                    <i data-lucide="phone" class="w-5 h-5"></i> +62 851-9628-4611
+                </a>
+            </div>
+        </div>
+
+        <!-- Section Link Internal Admin & Copyright -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+            <div>
+                &copy; 2026 Swimmo Malang. All rights reserved.
+            </div>
+            
+            <!-- Tombol Link Login Admin Internal -->
+            <div>
+                <a href="login.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-brandPink text-slate-400 hover:text-white transition-all font-medium border border-slate-700">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span>Portal Admin & Pelatih</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
